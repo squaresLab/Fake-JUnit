@@ -140,6 +140,7 @@ public class JUnitCore {
         } finally {
             removeListener(listener);
         }
+        org.junit.Assert.printStats();
         return result;
     }
 
