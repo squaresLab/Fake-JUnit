@@ -23,6 +23,7 @@ import org.junit.internal.InexactComparisonCriteria;
  * @since 4.0
  */
 public class Assert {
+    public static int depth = 1;
     /**
      * Protect constructor since it is a static only class
      */
@@ -39,7 +40,10 @@ public class Assert {
      */
     public static void assertTrue(String message, boolean condition) {
         if (!condition) {
-            fail(message);
+            DataPack.fail(depth);
+        }
+        else {
+            DataPack.pass(depth);
         }
     }
 
@@ -50,7 +54,9 @@ public class Assert {
      * @param condition condition to be checked
      */
     public static void assertTrue(boolean condition) {
+        depth++;
         assertTrue(null, condition);
+        depth--;
     }
 
     /**
@@ -62,7 +68,9 @@ public class Assert {
      * @param condition condition to be checked
      */
     public static void assertFalse(String message, boolean condition) {
+        depth++;
         assertTrue(message, !condition);
+        depth--;
     }
 
     /**
@@ -72,7 +80,9 @@ public class Assert {
      * @param condition condition to be checked
      */
     public static void assertFalse(boolean condition) {
+        depth++;
         assertFalse(null, condition);
+        depth--;
     }
 
     /**
@@ -110,14 +120,13 @@ public class Assert {
     public static void assertEquals(String message, Object expected,
             Object actual) {
         if (equalsRegardingNull(expected, actual)) {
+            DataPack.pass(depth);
             return;
         }
         if (expected instanceof String && actual instanceof String) {
-            String cleanMessage = message == null ? "" : message;
-            throw new ComparisonFailure(cleanMessage, (String) expected,
-                    (String) actual);
+            DataPack.checkString((String)expected,(String)actual,depth);
         } else {
-            failNotEquals(message, expected, actual);
+            DataPack.fail(depth);
         }
     }
 
@@ -143,7 +152,9 @@ public class Assert {
      * @param actual the value to check against <code>expected</code>
      */
     public static void assertEquals(Object expected, Object actual) {
+        depth++;
         assertEquals(null, expected, actual);
+        depth--;
     }
 
     /**
@@ -160,7 +171,10 @@ public class Assert {
     public static void assertNotEquals(String message, Object unexpected,
             Object actual) {
         if (equalsRegardingNull(unexpected, actual)) {
-            failEquals(message, actual);
+            DataPack.fail(depth);
+        }
+        else {
+            DataPack.pass(depth);
         }
     }
 
@@ -174,7 +188,9 @@ public class Assert {
      * @param actual the value to check against <code>unexpected</code>
      */
     public static void assertNotEquals(Object unexpected, Object actual) {
+        depth++;
         assertNotEquals(null, unexpected, actual);
+        depth--;
     }
 
     private static void failEquals(String message, Object actual) {
@@ -198,7 +214,9 @@ public class Assert {
      */
     public static void assertNotEquals(String message, long unexpected, long actual) {
         if (unexpected == actual) {
-            failEquals(message, Long.valueOf(actual));
+            DataPack.fail(depth);
+        }else {
+            DataPack.pass(depth);
         }
     }
 
@@ -210,7 +228,9 @@ public class Assert {
      * @param actual the value to check against <code>unexpected</code>
      */
     public static void assertNotEquals(long unexpected, long actual) {
+        depth++;
         assertNotEquals(null, unexpected, actual);
+        depth--;
     }
 
     /**
@@ -231,7 +251,9 @@ public class Assert {
     public static void assertNotEquals(String message, double unexpected,
             double actual, double delta) {
         if (!doubleIsDifferent(unexpected, actual, delta)) {
-            failEquals(message, Double.valueOf(actual));
+            DataPack.fail(depth);
+        }else {
+            DataPack.pass(depth);
         }
     }
 
@@ -248,7 +270,9 @@ public class Assert {
      * considered equal.
      */
     public static void assertNotEquals(double unexpected, double actual, double delta) {
+        depth++;
         assertNotEquals(null, unexpected, actual, delta);
+        depth--;
     }
 
     /**
@@ -264,7 +288,9 @@ public class Assert {
      * considered equal.
      */
     public static void assertNotEquals(float unexpected, float actual, float delta) {
+        depth++;
         assertNotEquals(null, unexpected, actual, delta);
+        depth--;
     }
 
     /**
@@ -282,7 +308,9 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, Object[] expecteds,
             Object[] actuals) throws ArrayComparisonFailure {
+        depth++;
         internalArrayEquals(message, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -297,7 +325,9 @@ public class Assert {
      * actual values
      */
     public static void assertArrayEquals(Object[] expecteds, Object[] actuals) {
+        depth++;
         assertArrayEquals(null, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -313,7 +343,9 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, boolean[] expecteds,
             boolean[] actuals) throws ArrayComparisonFailure {
+        depth++;
         internalArrayEquals(message, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -326,7 +358,9 @@ public class Assert {
      * @param actuals boolean array with expected values.
      */
     public static void assertArrayEquals(boolean[] expecteds, boolean[] actuals) {
+        depth++;
         assertArrayEquals(null, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -340,7 +374,9 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, byte[] expecteds,
             byte[] actuals) throws ArrayComparisonFailure {
+        depth++;
         internalArrayEquals(message, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -351,7 +387,9 @@ public class Assert {
      * @param actuals byte array with actual values
      */
     public static void assertArrayEquals(byte[] expecteds, byte[] actuals) {
+        depth++;
         assertArrayEquals(null, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -365,7 +403,9 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, char[] expecteds,
             char[] actuals) throws ArrayComparisonFailure {
+        depth++;
         internalArrayEquals(message, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -376,7 +416,9 @@ public class Assert {
      * @param actuals char array with actual values
      */
     public static void assertArrayEquals(char[] expecteds, char[] actuals) {
+        depth++;
         assertArrayEquals(null, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -390,7 +432,9 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, short[] expecteds,
             short[] actuals) throws ArrayComparisonFailure {
+        depth++;
         internalArrayEquals(message, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -401,7 +445,9 @@ public class Assert {
      * @param actuals short array with actual values
      */
     public static void assertArrayEquals(short[] expecteds, short[] actuals) {
+        depth++;
         assertArrayEquals(null, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -415,7 +461,9 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, int[] expecteds,
             int[] actuals) throws ArrayComparisonFailure {
+        depth++;
         internalArrayEquals(message, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -426,7 +474,9 @@ public class Assert {
      * @param actuals int array with actual values
      */
     public static void assertArrayEquals(int[] expecteds, int[] actuals) {
+        depth++;
         assertArrayEquals(null, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -440,7 +490,9 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, long[] expecteds,
             long[] actuals) throws ArrayComparisonFailure {
+        depth++;
         internalArrayEquals(message, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -451,7 +503,9 @@ public class Assert {
      * @param actuals long array with actual values
      */
     public static void assertArrayEquals(long[] expecteds, long[] actuals) {
+        depth++;
         assertArrayEquals(null, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -468,7 +522,9 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, double[] expecteds,
             double[] actuals, double delta) throws ArrayComparisonFailure {
+        depth++;
         new InexactComparisonCriteria(delta).arrayEquals(message, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -482,7 +538,9 @@ public class Assert {
      * considered equal.
      */
     public static void assertArrayEquals(double[] expecteds, double[] actuals, double delta) {
+        depth++;
         assertArrayEquals(null, expecteds, actuals, delta);
+        depth--;
     }
 
     /**
@@ -499,7 +557,9 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, float[] expecteds,
             float[] actuals, float delta) throws ArrayComparisonFailure {
+        depth++;
         new InexactComparisonCriteria(delta).arrayEquals(message, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -513,7 +573,9 @@ public class Assert {
      * considered equal.
      */
     public static void assertArrayEquals(float[] expecteds, float[] actuals, float delta) {
+        depth++;
         assertArrayEquals(null, expecteds, actuals, delta);
+        depth--;
     }
 
     /**
@@ -531,7 +593,9 @@ public class Assert {
      */
     private static void internalArrayEquals(String message, Object expecteds,
             Object actuals) throws ArrayComparisonFailure {
+        depth++;
         new ExactComparisonCriteria().arrayEquals(message, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -552,7 +616,9 @@ public class Assert {
     public static void assertEquals(String message, double expected,
             double actual, double delta) {
         if (doubleIsDifferent(expected, actual, delta)) {
-            failNotEquals(message, Double.valueOf(expected), Double.valueOf(actual));
+            DataPack.checkdouble(expected, actual, depth);
+        }else {
+            DataPack.pass(depth);
         }
     }
 
@@ -574,7 +640,9 @@ public class Assert {
     public static void assertEquals(String message, float expected,
             float actual, float delta) {
         if (floatIsDifferent(expected, actual, delta)) {
-            failNotEquals(message, Float.valueOf(expected), Float.valueOf(actual));
+            DataPack.checkdouble(expected, actual, depth);
+        }else {
+            DataPack.pass(depth);
         }
     }
 
@@ -596,7 +664,9 @@ public class Assert {
     public static void assertNotEquals(String message, float unexpected,
             float actual, float delta) {
         if (!floatIsDifferent(unexpected, actual, delta)) {
-            failEquals(message, actual);
+            DataPack.fail(depth);
+        }else {
+            DataPack.pass(depth);
         }
     }
 
@@ -630,7 +700,9 @@ public class Assert {
      * @param actual actual long value
      */
     public static void assertEquals(long expected, long actual) {
+        depth++;
         assertEquals(null, expected, actual);
+        depth--;
     }
 
     /**
@@ -644,7 +716,9 @@ public class Assert {
      */
     public static void assertEquals(String message, long expected, long actual) {
         if (expected != actual) {
-            failNotEquals(message, Long.valueOf(expected), Long.valueOf(actual));
+            DataPack.checklong(expected, actual, depth);
+        }else {
+            DataPack.pass(depth);
         }
     }
 
@@ -655,7 +729,9 @@ public class Assert {
      */
     @Deprecated
     public static void assertEquals(double expected, double actual) {
+        depth++;
         assertEquals(null, expected, actual);
+        depth--;
     }
 
     /**
@@ -666,7 +742,7 @@ public class Assert {
     @Deprecated
     public static void assertEquals(String message, double expected,
             double actual) {
-        fail("Use assertEquals(expected, actual, delta) to compare floating-point numbers");
+        DataPack.fail(depth);
     }
 
     /**
@@ -682,7 +758,9 @@ public class Assert {
      * considered equal.
      */
     public static void assertEquals(double expected, double actual, double delta) {
+        depth++;
         assertEquals(null, expected, actual, delta);
+        depth--;
     }
 
     /**
@@ -698,7 +776,9 @@ public class Assert {
      * considered equal.
      */
     public static void assertEquals(float expected, float actual, float delta) {
+        depth++;
         assertEquals(null, expected, actual, delta);
+        depth--;
     }
 
     /**
@@ -710,7 +790,9 @@ public class Assert {
      * @param object Object to check or <code>null</code>
      */
     public static void assertNotNull(String message, Object object) {
+        depth++;
         assertTrue(message, object != null);
+        depth--;
     }
 
     /**
@@ -720,7 +802,9 @@ public class Assert {
      * @param object Object to check or <code>null</code>
      */
     public static void assertNotNull(Object object) {
+        depth++;
         assertNotNull(null, object);
+        depth--;
     }
 
     /**
@@ -733,9 +817,10 @@ public class Assert {
      */
     public static void assertNull(String message, Object object) {
         if (object == null) {
+            DataPack.pass(depth);
             return;
         }
-        failNotNull(message, object);
+        DataPack.fail(depth);
     }
 
     /**
@@ -745,7 +830,9 @@ public class Assert {
      * @param object Object to check or <code>null</code>
      */
     public static void assertNull(Object object) {
+        depth++;
         assertNull(null, object);
+        depth--;
     }
 
     private static void failNotNull(String message, Object actual) {
@@ -767,9 +854,11 @@ public class Assert {
      */
     public static void assertSame(String message, Object expected, Object actual) {
         if (expected == actual) {
+            DataPack.pass(depth);
             return;
         }
-        failNotSame(message, expected, actual);
+        DataPack.fail(depth);
+        //failNotSame(message, expected, actual);
     }
 
     /**
@@ -780,7 +869,9 @@ public class Assert {
      * @param actual the object to compare to <code>expected</code>
      */
     public static void assertSame(Object expected, Object actual) {
+        depth++;
         assertSame(null, expected, actual);
+        depth--;
     }
 
     /**
@@ -796,7 +887,9 @@ public class Assert {
     public static void assertNotSame(String message, Object unexpected,
             Object actual) {
         if (unexpected == actual) {
-            failSame(message);
+            DataPack.fail(depth);
+        }else {
+            DataPack.pass(depth);
         }
     }
 
@@ -809,7 +902,9 @@ public class Assert {
      * @param actual the object to compare to <code>unexpected</code>
      */
     public static void assertNotSame(Object unexpected, Object actual) {
+        depth++;
         assertNotSame(null, unexpected, actual);
+        depth--;
     }
 
     private static void failSame(String message) {
@@ -879,7 +974,9 @@ public class Assert {
     @Deprecated
     public static void assertEquals(String message, Object[] expecteds,
             Object[] actuals) {
+        depth++;
         assertArrayEquals(message, expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -896,7 +993,9 @@ public class Assert {
      */
     @Deprecated
     public static void assertEquals(Object[] expecteds, Object[] actuals) {
+        depth++;
         assertArrayEquals(expecteds, actuals);
+        depth--;
     }
 
     /**
@@ -928,7 +1027,9 @@ public class Assert {
      */
     @Deprecated
     public static <T> void assertThat(T actual, Matcher<? super T> matcher) {
+        depth++;
         assertThat("", actual, matcher);
+        depth--;
     }
 
     /**
@@ -963,7 +1064,9 @@ public class Assert {
     @Deprecated
     public static <T> void assertThat(String reason, T actual,
             Matcher<? super T> matcher) {
+        depth++;
         MatcherAssert.assertThat(reason, actual, matcher);
+        depth--;
     }
 
     /**

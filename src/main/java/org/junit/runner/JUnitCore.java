@@ -34,6 +34,7 @@ public class JUnitCore {
      */
     public static void main(String... args) {
         Result result = new JUnitCore().runMain(new RealSystem(), args);
+        org.junit.DataPack.dataDump();
         System.exit(result.wasSuccessful() ? 0 : 1);
     }
 
