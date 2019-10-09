@@ -2,6 +2,7 @@ package org.junit.runners.model;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.List;
 
 import org.junit.runners.BlockJUnit4ClassRunner;
 
@@ -20,6 +21,15 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
                     "FrameworkField cannot be created without an underlying field.");
         }
         this.field = field;
+
+        if (isPublic()) {
+            // This field could be a public field in a package-scope base class
+            try {
+                field.setAccessible(true);
+            } catch (SecurityException  e) {
+                // We may get an IllegalAccessException when we try to access the field
+            }
+        }
     }
 
     @Override
@@ -38,6 +48,11 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
     @Override
     public boolean isShadowedBy(FrameworkField otherMember) {
         return otherMember.getName().equals(getName());
+    }
+
+    @Override
+    boolean isBridgeMethod() {
+        return false;
     }
 
     @Override

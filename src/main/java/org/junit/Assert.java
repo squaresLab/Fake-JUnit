@@ -1,10 +1,8 @@
 package org.junit;
 
-import java.util.*;
-import java.io.*;
 import org.hamcrest.Matcher;
-
 import org.hamcrest.MatcherAssert;
+import org.junit.function.ThrowingRunnable;
 import org.junit.internal.ArrayComparisonFailure;
 import org.junit.internal.ExactComparisonCriteria;
 import org.junit.internal.InexactComparisonCriteria;
@@ -30,66 +28,6 @@ public class Assert {
      */
     protected Assert() {
     }
-    
-    public static int assertTrueCount = 0;
-    public static int assertFalseCount = 0;
-    public static int assertEqualsLongCount = 0;
-    public static int assertEqualsFloatCount = 0;
-    public static int assertEqualsDoubleCount = 0;
-    public static int assertEqualsStringCount = 0;
-    public static int assertEqualsNonStringObjectCount = 0;
-    public static int assertNotEqualsIntCount = 0;
-    public static int assertNotEqualsLongCount = 0;
-    public static int assertNotEqualsFloatCount = 0;
-    public static int assertNotEqualsDoubleCount = 0;
-    public static int assertNotEqualsStringCount = 0;
-    public static int assertNotEqualsNonStringObjectCount = 0;
-    public static int assertSameCount = 0;
-    public static int assertNullCount = 0;
-    public static int assertArrayEqualsIntCount = 0;
-    public static int assertArrayEqualsLongCount = 0;
-    public static int assertArrayEqualsFloatCount = 0;
-    public static int assertArrayEqualsDoubleCount = 0;
-    public static int assertArrayEqualsCharCount = 0;
-    public static int assertArrayEqualsStringCount = 0;
-    public static int assertArrayEqualsBooleanCount = 0;
-    public static int assertArrayEqualsShortCount = 0;
-    public static int assertArrayEqualsByteCount = 0;
-    public static int assertArrayEqualsNonStringObjectCount = 0;
-    public static int assertNotNullCount = 0;
-    public static int assertThatCount = 0;
-    public static int assertNotSameCount = 0;
-    public static Set<String> stacktraces = new HashSet<String>();
-    
-    public static void printStats() {
-        System.out.println("AssertTrueCount: "+assertTrueCount);
-        System.out.println("AssertFalseCount: "+assertFalseCount);
-        System.out.println("AssertEqualsLongCount: "+assertEqualsLongCount);
-        System.out.println("AssertEqualsFloatCount: "+assertEqualsFloatCount);
-        System.out.println("AssertEqualsDoubleCount: "+assertEqualsDoubleCount);
-        System.out.println("AssertEqualsStringCount: "+assertEqualsStringCount);
-        System.out.println("AssertEqualsNonStringObjectCount: "+assertEqualsNonStringObjectCount);
-        System.out.println("AssertNotEqualsLongCount: "+assertNotEqualsLongCount);
-        System.out.println("AssertNotEqualsFloatCount: "+assertNotEqualsFloatCount);
-        System.out.println("AssertNotEqualsDoubleCount: "+assertNotEqualsDoubleCount);
-        System.out.println("AssertNotEqualsStringCount: "+assertNotEqualsStringCount);
-        System.out.println("AssertNotEqualsNonStringObjectCount: "+assertNotEqualsNonStringObjectCount);
-        System.out.println("AssertArrayEqualsIntCount: "+assertArrayEqualsIntCount);
-        System.out.println("AssertArrayEqualsLongCount: "+assertArrayEqualsLongCount);
-        System.out.println("AssertArrayEqualsFloatCount: "+assertArrayEqualsFloatCount);
-        System.out.println("AssertArrayEqualsDoubleCount: "+assertArrayEqualsDoubleCount);
-        System.out.println("AssertArrayEqualsCharCount: "+assertArrayEqualsCharCount);
-        System.out.println("AssertArrayEqualsStringCount: "+assertArrayEqualsStringCount);
-        System.out.println("AssertArrayEqualsBooleanCount: "+assertArrayEqualsBooleanCount);
-        System.out.println("AssertArrayEqualsShortCount: "+assertArrayEqualsShortCount);
-        System.out.println("AssertArrayEqualsNonStringObjectCount: "+assertArrayEqualsNonStringObjectCount);
-        System.out.println("AssertArrayEqualsIntCount: "+assertArrayEqualsIntCount);
-        System.out.println("AssertSameCount: "+assertSameCount);
-        System.out.println("AssertNotSameCount: "+assertNotSameCount);
-        System.out.println("AssertNullCount: "+assertNullCount);
-        System.out.println("AssertNotNullCount: "+assertNotNullCount);
-        System.out.println("AssertThatCount: "+assertThatCount);
-    }
 
     /**
      * Asserts that a condition is true. If it isn't it throws an
@@ -99,21 +37,10 @@ public class Assert {
      * okay)
      * @param condition condition to be checked
      */
-    static public void assertTrue(String message, boolean condition) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertTrueCount++;
-            stacktraces.add(trace.toString());
-        }
-        /*if (!condition) {
+    public static void assertTrue(String message, boolean condition) {
+        if (!condition) {
             fail(message);
-        }*/
+        }
     }
 
     /**
@@ -122,19 +49,8 @@ public class Assert {
      *
      * @param condition condition to be checked
      */
-    static public void assertTrue(boolean condition) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertTrueCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertTrue(null, condition);
+    public static void assertTrue(boolean condition) {
+        assertTrue(null, condition);
     }
 
     /**
@@ -145,19 +61,8 @@ public class Assert {
      * okay)
      * @param condition condition to be checked
      */
-    static public void assertFalse(String message, boolean condition) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertFalseCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertTrue(message, !condition);
+    public static void assertFalse(String message, boolean condition) {
+        assertTrue(message, !condition);
     }
 
     /**
@@ -166,19 +71,8 @@ public class Assert {
      *
      * @param condition condition to be checked
      */
-    static public void assertFalse(boolean condition) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertFalseCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertFalse(null, condition);
+    public static void assertFalse(boolean condition) {
+        assertFalse(null, condition);
     }
 
     /**
@@ -188,7 +82,7 @@ public class Assert {
      * okay)
      * @see AssertionError
      */
-    static public void fail(String message) {
+    public static void fail(String message) {
         if (message == null) {
             throw new AssertionError();
         }
@@ -198,7 +92,7 @@ public class Assert {
     /**
      * Fails a test with no message.
      */
-    static public void fail() {
+    public static void fail() {
         fail(null);
     }
 
@@ -213,30 +107,18 @@ public class Assert {
      * @param expected expected value
      * @param actual actual value
      */
-    static public void assertEquals(String message, Object expected,
+    public static void assertEquals(String message, Object expected,
             Object actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            if(expected instanceof String)assertEqualsStringCount++;else assertEqualsNonStringObjectCount++;
-            stacktraces.add(trace.toString());
-        }
-        
-        /*
         if (equalsRegardingNull(expected, actual)) {
             return;
-        } else if (expected instanceof String && actual instanceof String) {
+        }
+        if (expected instanceof String && actual instanceof String) {
             String cleanMessage = message == null ? "" : message;
             throw new ComparisonFailure(cleanMessage, (String) expected,
                     (String) actual);
         } else {
             failNotEquals(message, expected, actual);
-        }*/
+        }
     }
 
     private static boolean equalsRegardingNull(Object expected, Object actual) {
@@ -260,19 +142,8 @@ public class Assert {
      * @param expected expected value
      * @param actual the value to check against <code>expected</code>
      */
-    static public void assertEquals(Object expected, Object actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            if(expected instanceof String)assertEqualsStringCount++;else assertEqualsNonStringObjectCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertEquals(null, expected, actual);
+    public static void assertEquals(Object expected, Object actual) {
+        assertEquals(null, expected, actual);
     }
 
     /**
@@ -286,23 +157,11 @@ public class Assert {
      * @param unexpected unexpected value to check
      * @param actual the value to check against <code>unexpected</code>
      */
-    static public void assertNotEquals(String message, Object unexpected,
+    public static void assertNotEquals(String message, Object unexpected,
             Object actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            if(unexpected instanceof String)assertNotEqualsStringCount++;else assertNotEqualsNonStringObjectCount++;
-            stacktraces.add(trace.toString());
-        }
-        /*
         if (equalsRegardingNull(unexpected, actual)) {
             failEquals(message, actual);
-        }*/
+        }
     }
 
     /**
@@ -314,19 +173,8 @@ public class Assert {
      * @param unexpected unexpected value to check
      * @param actual the value to check against <code>unexpected</code>
      */
-    static public void assertNotEquals(Object unexpected, Object actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            if(unexpected instanceof String)assertNotEqualsStringCount++;else assertNotEqualsNonStringObjectCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertNotEquals(null, unexpected, actual);
+    public static void assertNotEquals(Object unexpected, Object actual) {
+        assertNotEquals(null, unexpected, actual);
     }
 
     private static void failEquals(String message, Object actual) {
@@ -348,21 +196,10 @@ public class Assert {
      * @param unexpected unexpected value to check
      * @param actual the value to check against <code>unexpected</code>
      */
-    static public void assertNotEquals(String message, long unexpected, long actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertNotEqualsLongCount++;
-            stacktraces.add(trace.toString());
-        }
-        /*if (unexpected == actual) {
+    public static void assertNotEquals(String message, long unexpected, long actual) {
+        if (unexpected == actual) {
             failEquals(message, Long.valueOf(actual));
-        }*/
+        }
     }
 
     /**
@@ -372,19 +209,8 @@ public class Assert {
      * @param unexpected unexpected value to check
      * @param actual the value to check against <code>unexpected</code>
      */
-    static public void assertNotEquals(long unexpected, long actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertNotEqualsLongCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertNotEquals(null, unexpected, actual);
+    public static void assertNotEquals(long unexpected, long actual) {
+        assertNotEquals(null, unexpected, actual);
     }
 
     /**
@@ -402,23 +228,11 @@ public class Assert {
      * <code>actual</code> for which both numbers are still
      * considered equal.
      */
-    static public void assertNotEquals(String message, double unexpected,
+    public static void assertNotEquals(String message, double unexpected,
             double actual, double delta) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertNotEqualsDoubleCount++;
-            stacktraces.add(trace.toString());
-        }
-        /*
         if (!doubleIsDifferent(unexpected, actual, delta)) {
             failEquals(message, Double.valueOf(actual));
-        }*/
+        }
     }
 
     /**
@@ -433,19 +247,8 @@ public class Assert {
      * <code>actual</code> for which both numbers are still
      * considered equal.
      */
-    static public void assertNotEquals(double unexpected, double actual, double delta) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertNotEqualsDoubleCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertNotEquals(null, unexpected, actual, delta);
+    public static void assertNotEquals(double unexpected, double actual, double delta) {
+        assertNotEquals(null, unexpected, actual, delta);
     }
 
     /**
@@ -460,19 +263,8 @@ public class Assert {
      * <code>actual</code> for which both numbers are still
      * considered equal.
      */
-    static public void assertNotEquals(float unexpected, float actual, float delta) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertNotEqualsFloatCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertNotEquals(null, unexpected, actual, delta);
+    public static void assertNotEquals(float unexpected, float actual, float delta) {
+        assertNotEquals(null, unexpected, actual, delta);
     }
 
     /**
@@ -490,19 +282,7 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, Object[] expecteds,
             Object[] actuals) throws ArrayComparisonFailure {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            if(actuals instanceof String[]) assertArrayEqualsStringCount++;else assertArrayEqualsNonStringObjectCount++;
-            stacktraces.add(trace.toString());
-        }
-        
-        //internalArrayEquals(message, expecteds, actuals);
+        internalArrayEquals(message, expecteds, actuals);
     }
 
     /**
@@ -517,21 +297,9 @@ public class Assert {
      * actual values
      */
     public static void assertArrayEquals(Object[] expecteds, Object[] actuals) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            if(actuals instanceof String[]) assertArrayEqualsStringCount++;else assertArrayEqualsNonStringObjectCount++;
-            stacktraces.add(trace.toString());
-        }
-        
-        //assertArrayEquals(null, expecteds, actuals);
+        assertArrayEquals(null, expecteds, actuals);
     }
-    
+
     /**
      * Asserts that two boolean arrays are equal. If they are not, an
      * {@link AssertionError} is thrown with the given message. If
@@ -545,21 +313,9 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, boolean[] expecteds,
             boolean[] actuals) throws ArrayComparisonFailure {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsBooleanCount++;
-            stacktraces.add(trace.toString());
-        }
-        
-        //internalArrayEquals(message, expecteds, actuals);
-    }    
-    
+        internalArrayEquals(message, expecteds, actuals);
+    }
+
     /**
      * Asserts that two boolean arrays are equal. If they are not, an
      * {@link AssertionError} is thrown. If <code>expected</code> and
@@ -570,18 +326,7 @@ public class Assert {
      * @param actuals boolean array with expected values.
      */
     public static void assertArrayEquals(boolean[] expecteds, boolean[] actuals) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsBooleanCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertArrayEquals(null, expecteds, actuals);
+        assertArrayEquals(null, expecteds, actuals);
     }
 
     /**
@@ -595,18 +340,7 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, byte[] expecteds,
             byte[] actuals) throws ArrayComparisonFailure {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsByteCount++;
-            stacktraces.add(trace.toString());
-        }
-        //internalArrayEquals(message, expecteds, actuals);
+        internalArrayEquals(message, expecteds, actuals);
     }
 
     /**
@@ -617,18 +351,7 @@ public class Assert {
      * @param actuals byte array with actual values
      */
     public static void assertArrayEquals(byte[] expecteds, byte[] actuals) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsByteCount++;
-            stacktraces.add(trace.toString());
-        }
-        //ssertArrayEquals(null, expecteds, actuals);
+        assertArrayEquals(null, expecteds, actuals);
     }
 
     /**
@@ -642,18 +365,7 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, char[] expecteds,
             char[] actuals) throws ArrayComparisonFailure {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsCharCount++;
-            stacktraces.add(trace.toString());
-        }
-        //internalArrayEquals(message, expecteds, actuals);
+        internalArrayEquals(message, expecteds, actuals);
     }
 
     /**
@@ -664,18 +376,7 @@ public class Assert {
      * @param actuals char array with actual values
      */
     public static void assertArrayEquals(char[] expecteds, char[] actuals) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsCharCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertArrayEquals(null, expecteds, actuals);
+        assertArrayEquals(null, expecteds, actuals);
     }
 
     /**
@@ -689,18 +390,7 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, short[] expecteds,
             short[] actuals) throws ArrayComparisonFailure {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsShortCount++;
-            stacktraces.add(trace.toString());
-        }
-        //internalArrayEquals(message, expecteds, actuals);
+        internalArrayEquals(message, expecteds, actuals);
     }
 
     /**
@@ -711,18 +401,7 @@ public class Assert {
      * @param actuals short array with actual values
      */
     public static void assertArrayEquals(short[] expecteds, short[] actuals) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsShortCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertArrayEquals(null, expecteds, actuals);
+        assertArrayEquals(null, expecteds, actuals);
     }
 
     /**
@@ -736,18 +415,7 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, int[] expecteds,
             int[] actuals) throws ArrayComparisonFailure {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsIntCount++;
-            stacktraces.add(trace.toString());
-        }
-        //internalArrayEquals(message, expecteds, actuals);
+        internalArrayEquals(message, expecteds, actuals);
     }
 
     /**
@@ -758,18 +426,7 @@ public class Assert {
      * @param actuals int array with actual values
      */
     public static void assertArrayEquals(int[] expecteds, int[] actuals) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsIntCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertArrayEquals(null, expecteds, actuals);
+        assertArrayEquals(null, expecteds, actuals);
     }
 
     /**
@@ -783,18 +440,7 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, long[] expecteds,
             long[] actuals) throws ArrayComparisonFailure {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsLongCount++;
-            stacktraces.add(trace.toString());
-        }
-        //internalArrayEquals(message, expecteds, actuals);
+        internalArrayEquals(message, expecteds, actuals);
     }
 
     /**
@@ -805,18 +451,7 @@ public class Assert {
      * @param actuals long array with actual values
      */
     public static void assertArrayEquals(long[] expecteds, long[] actuals) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsLongCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertArrayEquals(null, expecteds, actuals);
+        assertArrayEquals(null, expecteds, actuals);
     }
 
     /**
@@ -833,18 +468,7 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, double[] expecteds,
             double[] actuals, double delta) throws ArrayComparisonFailure {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsDoubleCount++;
-            stacktraces.add(trace.toString());
-        }
-        //new InexactComparisonCriteria(delta).arrayEquals(message, expecteds, actuals);
+        new InexactComparisonCriteria(delta).arrayEquals(message, expecteds, actuals);
     }
 
     /**
@@ -858,18 +482,7 @@ public class Assert {
      * considered equal.
      */
     public static void assertArrayEquals(double[] expecteds, double[] actuals, double delta) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsDoubleCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertArrayEquals(null, expecteds, actuals, delta);
+        assertArrayEquals(null, expecteds, actuals, delta);
     }
 
     /**
@@ -886,18 +499,7 @@ public class Assert {
      */
     public static void assertArrayEquals(String message, float[] expecteds,
             float[] actuals, float delta) throws ArrayComparisonFailure {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsFloatCount++;
-            stacktraces.add(trace.toString());
-        }
-        //new InexactComparisonCriteria(delta).arrayEquals(message, expecteds, actuals);
+        new InexactComparisonCriteria(delta).arrayEquals(message, expecteds, actuals);
     }
 
     /**
@@ -911,18 +513,7 @@ public class Assert {
      * considered equal.
      */
     public static void assertArrayEquals(float[] expecteds, float[] actuals, float delta) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertArrayEqualsFloatCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertArrayEquals(null, expecteds, actuals, delta);
+        assertArrayEquals(null, expecteds, actuals, delta);
     }
 
     /**
@@ -958,22 +549,11 @@ public class Assert {
      * <code>actual</code> for which both numbers are still
      * considered equal.
      */
-    static public void assertEquals(String message, double expected,
+    public static void assertEquals(String message, double expected,
             double actual, double delta) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertEqualsDoubleCount++;
-            stacktraces.add(trace.toString());
-        }
-        /*if (doubleIsDifferent(expected, actual, delta)) {
+        if (doubleIsDifferent(expected, actual, delta)) {
             failNotEquals(message, Double.valueOf(expected), Double.valueOf(actual));
-        }*/
+        }
     }
 
     /**
@@ -991,22 +571,11 @@ public class Assert {
      * <code>actual</code> for which both numbers are still
      * considered equal.
      */
-    static public void assertEquals(String message, float expected,
+    public static void assertEquals(String message, float expected,
             float actual, float delta) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertEqualsFloatCount++;
-            stacktraces.add(trace.toString());
-        }
-        /*if (floatIsDifferent(expected, actual, delta)) {
+        if (floatIsDifferent(expected, actual, delta)) {
             failNotEquals(message, Float.valueOf(expected), Float.valueOf(actual));
-        }*/
+        }
     }
 
     /**
@@ -1024,25 +593,14 @@ public class Assert {
      * <code>actual</code> for which both numbers are still
      * considered equal.
      */
-    static public void assertNotEquals(String message, float unexpected,
+    public static void assertNotEquals(String message, float unexpected,
             float actual, float delta) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
+        if (!floatIsDifferent(unexpected, actual, delta)) {
+            failEquals(message, actual);
         }
-        if(!stacktraces.contains(trace.toString())) {
-            assertEqualsFloatCount++;
-            stacktraces.add(trace.toString());
-        }
-        /*if (!floatIsDifferent(unexpected, actual, delta)) {
-            failEquals(message, Float.valueOf(actual));
-        }*/
     }
 
-    static private boolean doubleIsDifferent(double d1, double d2, double delta) {
+    private static boolean doubleIsDifferent(double d1, double d2, double delta) {
         if (Double.compare(d1, d2) == 0) {
             return false;
         }
@@ -1053,7 +611,7 @@ public class Assert {
         return true;
     }
 
-    static private boolean floatIsDifferent(float f1, float f2, float delta) {
+    private static boolean floatIsDifferent(float f1, float f2, float delta) {
         if (Float.compare(f1, f2) == 0) {
             return false;
         }
@@ -1071,19 +629,8 @@ public class Assert {
      * @param expected expected long value.
      * @param actual actual long value
      */
-    static public void assertEquals(long expected, long actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertEqualsLongCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertEquals(null, expected, actual);
+    public static void assertEquals(long expected, long actual) {
+        assertEquals(null, expected, actual);
     }
 
     /**
@@ -1095,21 +642,10 @@ public class Assert {
      * @param expected long expected value.
      * @param actual long actual value
      */
-    static public void assertEquals(String message, long expected, long actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertEqualsLongCount++;
-            stacktraces.add(trace.toString());
-        }
-        /*if (expected != actual) {
+    public static void assertEquals(String message, long expected, long actual) {
+        if (expected != actual) {
             failNotEquals(message, Long.valueOf(expected), Long.valueOf(actual));
-        }*/
+        }
     }
 
     /**
@@ -1118,19 +654,8 @@ public class Assert {
      *             instead
      */
     @Deprecated
-    static public void assertEquals(double expected, double actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertEqualsDoubleCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertEquals(null, expected, actual);
+    public static void assertEquals(double expected, double actual) {
+        assertEquals(null, expected, actual);
     }
 
     /**
@@ -1139,20 +664,9 @@ public class Assert {
      *             instead
      */
     @Deprecated
-    static public void assertEquals(String message, double expected,
+    public static void assertEquals(String message, double expected,
             double actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertEqualsDoubleCount++;
-            stacktraces.add(trace.toString());
-        }
-        //fail("Use assertEquals(expected, actual, delta) to compare floating-point numbers");
+        fail("Use assertEquals(expected, actual, delta) to compare floating-point numbers");
     }
 
     /**
@@ -1167,19 +681,8 @@ public class Assert {
      * <code>actual</code> for which both numbers are still
      * considered equal.
      */
-    static public void assertEquals(double expected, double actual, double delta) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertEqualsDoubleCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertEquals(null, expected, actual, delta);
+    public static void assertEquals(double expected, double actual, double delta) {
+        assertEquals(null, expected, actual, delta);
     }
 
     /**
@@ -1194,20 +697,8 @@ public class Assert {
      * <code>actual</code> for which both numbers are still
      * considered equal.
      */
-
-    static public void assertEquals(float expected, float actual, float delta) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertEqualsFloatCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertEquals(null, expected, actual, delta);
+    public static void assertEquals(float expected, float actual, float delta) {
+        assertEquals(null, expected, actual, delta);
     }
 
     /**
@@ -1218,19 +709,8 @@ public class Assert {
      * okay)
      * @param object Object to check or <code>null</code>
      */
-    static public void assertNotNull(String message, Object object) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertNotNullCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertTrue(message, object != null);
+    public static void assertNotNull(String message, Object object) {
+        assertTrue(message, object != null);
     }
 
     /**
@@ -1239,19 +719,8 @@ public class Assert {
      *
      * @param object Object to check or <code>null</code>
      */
-    static public void assertNotNull(Object object) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertNotNullCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertNotNull(null, object);
+    public static void assertNotNull(Object object) {
+        assertNotNull(null, object);
     }
 
     /**
@@ -1262,22 +731,11 @@ public class Assert {
      * okay)
      * @param object Object to check or <code>null</code>
      */
-    static public void assertNull(String message, Object object) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertNullCount++;
-            stacktraces.add(trace.toString());
-        }
-        /*if (object == null) {
+    public static void assertNull(String message, Object object) {
+        if (object == null) {
             return;
         }
-        failNotNull(message, object);*/
+        failNotNull(message, object);
     }
 
     /**
@@ -1286,22 +744,11 @@ public class Assert {
      *
      * @param object Object to check or <code>null</code>
      */
-    static public void assertNull(Object object) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertNullCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertNull(null, object);
+    public static void assertNull(Object object) {
+        assertNull(null, object);
     }
 
-    static private void failNotNull(String message, Object actual) {
+    private static void failNotNull(String message, Object actual) {
         String formatted = "";
         if (message != null) {
             formatted = message + " ";
@@ -1318,22 +765,11 @@ public class Assert {
      * @param expected the expected object
      * @param actual the object to compare to <code>expected</code>
      */
-    static public void assertSame(String message, Object expected, Object actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertSameCount++;
-            stacktraces.add(trace.toString());
-        }
-        /*if (expected == actual) {
+    public static void assertSame(String message, Object expected, Object actual) {
+        if (expected == actual) {
             return;
         }
-        failNotSame(message, expected, actual);*/
+        failNotSame(message, expected, actual);
     }
 
     /**
@@ -1343,19 +779,8 @@ public class Assert {
      * @param expected the expected object
      * @param actual the object to compare to <code>expected</code>
      */
-    static public void assertSame(Object expected, Object actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertSameCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertSame(null, expected, actual);
+    public static void assertSame(Object expected, Object actual) {
+        assertSame(null, expected, actual);
     }
 
     /**
@@ -1368,22 +793,11 @@ public class Assert {
      * @param unexpected the object you don't expect
      * @param actual the object to compare to <code>unexpected</code>
      */
-    static public void assertNotSame(String message, Object unexpected,
+    public static void assertNotSame(String message, Object unexpected,
             Object actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertNotSameCount++;
-            stacktraces.add(trace.toString());
-        }
-        /*if (unexpected == actual) {
+        if (unexpected == actual) {
             failSame(message);
-        }*/
+        }
     }
 
     /**
@@ -1394,22 +808,11 @@ public class Assert {
      * @param unexpected the object you don't expect
      * @param actual the object to compare to <code>unexpected</code>
      */
-    static public void assertNotSame(Object unexpected, Object actual) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertNotSameCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertNotSame(null, unexpected, actual);
+    public static void assertNotSame(Object unexpected, Object actual) {
+        assertNotSame(null, unexpected, actual);
     }
 
-    static private void failSame(String message) {
+    private static void failSame(String message) {
         String formatted = "";
         if (message != null) {
             formatted = message + " ";
@@ -1417,7 +820,7 @@ public class Assert {
         fail(formatted + "expected not same");
     }
 
-    static private void failNotSame(String message, Object expected,
+    private static void failNotSame(String message, Object expected,
             Object actual) {
         String formatted = "";
         if (message != null) {
@@ -1427,19 +830,19 @@ public class Assert {
                 + ">");
     }
 
-    static private void failNotEquals(String message, Object expected,
+    private static void failNotEquals(String message, Object expected,
             Object actual) {
         fail(format(message, expected, actual));
     }
 
     static String format(String message, Object expected, Object actual) {
         String formatted = "";
-        if (message != null && !message.equals("")) {
+        if (message != null && !"".equals(message)) {
             formatted = message + " ";
         }
         String expectedString = String.valueOf(expected);
         String actualString = String.valueOf(actual);
-        if (expectedString.equals(actualString)) {
+        if (equalsRegardingNull(expectedString, actualString)) {
             return formatted + "expected: "
                     + formatClassAndValue(expected, expectedString)
                     + " but was: " + formatClassAndValue(actual, actualString);
@@ -1447,6 +850,11 @@ public class Assert {
             return formatted + "expected:<" + expectedString + "> but was:<"
                     + actualString + ">";
         }
+    }
+
+    private static String formatClass(Class<?> value) {
+        String className = value.getCanonicalName();
+        return className == null ? value.getName() : className;
     }
 
     private static String formatClassAndValue(Object value, String valueString) {
@@ -1516,20 +924,11 @@ public class Assert {
      * values
      * @see org.hamcrest.CoreMatchers
      * @see org.hamcrest.MatcherAssert
+     * @deprecated use {@code org.hamcrest.junit.MatcherAssert.assertThat()}
      */
+    @Deprecated
     public static <T> void assertThat(T actual, Matcher<? super T> matcher) {
-        StringWriter trace = new StringWriter();
-        try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
-        }
-        if(!stacktraces.contains(trace.toString())) {
-            assertThatCount++;
-            stacktraces.add(trace.toString());
-        }
-        //assertThat("", actual, matcher);
+        assertThat("", actual, matcher);
     }
 
     /**
@@ -1559,20 +958,79 @@ public class Assert {
      * values
      * @see org.hamcrest.CoreMatchers
      * @see org.hamcrest.MatcherAssert
+     * @deprecated use {@code org.hamcrest.junit.MatcherAssert.assertThat()}
      */
+    @Deprecated
     public static <T> void assertThat(String reason, T actual,
             Matcher<? super T> matcher) {
-        StringWriter trace = new StringWriter();
+        MatcherAssert.assertThat(reason, actual, matcher);
+    }
+
+    /**
+     * Asserts that {@code runnable} throws an exception of type {@code expectedThrowable} when
+     * executed. If it does, the exception object is returned. If it does not throw an exception, an
+     * {@link AssertionError} is thrown. If it throws the wrong type of exception, an {@code
+     * AssertionError} is thrown describing the mismatch; the exception that was actually thrown can
+     * be obtained by calling {@link AssertionError#getCause}.
+     *
+     * @param expectedThrowable the expected type of the exception
+     * @param runnable       a function that is expected to throw an exception when executed
+     * @return the exception thrown by {@code runnable}
+     * @since 4.13
+     */
+    public static <T extends Throwable> T assertThrows(Class<T> expectedThrowable,
+            ThrowingRunnable runnable) {
+        return assertThrows(null, expectedThrowable, runnable);
+    }
+
+    /**
+     * Asserts that {@code runnable} throws an exception of type {@code expectedThrowable} when
+     * executed. If it does, the exception object is returned. If it does not throw an exception, an
+     * {@link AssertionError} is thrown. If it throws the wrong type of exception, an {@code
+     * AssertionError} is thrown describing the mismatch; the exception that was actually thrown can
+     * be obtained by calling {@link AssertionError#getCause}.
+     *
+     * @param message the identifying message for the {@link AssertionError} (<code>null</code>
+     * okay)
+     * @param expectedThrowable the expected type of the exception
+     * @param runnable a function that is expected to throw an exception when executed
+     * @return the exception thrown by {@code runnable}
+     * @since 4.13
+     */
+    public static <T extends Throwable> T assertThrows(String message, Class<T> expectedThrowable,
+            ThrowingRunnable runnable) {
         try {
-            throw new Exception();
-        }catch(Exception e) {
-            
-            e.printStackTrace(new PrintWriter(trace));
+            runnable.run();
+        } catch (Throwable actualThrown) {
+            if (expectedThrowable.isInstance(actualThrown)) {
+                @SuppressWarnings("unchecked") T retVal = (T) actualThrown;
+                return retVal;
+            } else {
+                String expected = formatClass(expectedThrowable);
+                Class<? extends Throwable> actualThrowable = actualThrown.getClass();
+                String actual = formatClass(actualThrowable);
+                if (expected.equals(actual)) {
+                    // There must be multiple class loaders. Add the identity hash code so the message
+                    // doesn't say "expected: java.lang.String<my.package.MyException> ..."
+                    expected += "@" + Integer.toHexString(System.identityHashCode(expectedThrowable));
+                    actual += "@" + Integer.toHexString(System.identityHashCode(actualThrowable));
+                }
+                String mismatchMessage = buildPrefix(message)
+                        + format("unexpected exception type thrown;", expected, actual);
+
+                // The AssertionError(String, Throwable) ctor is only available on JDK7.
+                AssertionError assertionError = new AssertionError(mismatchMessage);
+                assertionError.initCause(actualThrown);
+                throw assertionError;
+            }
         }
-        if(!stacktraces.contains(trace.toString())) {
-            assertThatCount++;
-            stacktraces.add(trace.toString());
-        }
-        //MatcherAssert.assertThat(reason, actual, matcher);
+        String notThrownMessage = buildPrefix(message) + String
+                .format("expected %s to be thrown, but nothing was thrown",
+                        formatClass(expectedThrowable));
+        throw new AssertionError(notThrownMessage);
+    }
+
+    private static String buildPrefix(String message) {
+        return message != null && message.length() != 0 ? message + ": " : "";
     }
 }

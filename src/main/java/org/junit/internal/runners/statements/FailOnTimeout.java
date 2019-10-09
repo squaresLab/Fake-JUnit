@@ -1,8 +1,8 @@
 package org.junit.internal.runners.statements;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -10,6 +10,8 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.junit.internal.management.ManagementFactory;
+import org.junit.internal.management.ThreadMXBean;
 import org.junit.runners.model.MultipleFailureException;
 import org.junit.runners.model.Statement;
 import org.junit.runners.model.TestTimedOutException;
@@ -19,7 +21,6 @@ public class FailOnTimeout extends Statement {
     private final TimeUnit timeUnit;
     private final long timeout;
     private final boolean lookForStuckThread;
-    private volatile ThreadGroup threadGroup = null;
 
     /**
      * Returns a new builder for building an instance.
@@ -119,14 +120,28 @@ public class FailOnTimeout extends Statement {
     public void evaluate() throws Throwable {
         CallableStatement callable = new CallableStatement();
         FutureTask<Throwable> task = new FutureTask<Throwable>(callable);
-        threadGroup = new ThreadGroup("FailOnTimeoutGroup");
+        ThreadGroup threadGroup = new ThreadGroup("FailOnTimeoutGroup");
         Thread thread = new Thread(threadGroup, task, "Time-limited test");
-        thread.setDaemon(true);
-        thread.start();
-        callable.awaitStarted();
-        Throwable throwable = getResult(task, thread);
-        if (throwable != null) {
-            throw throwable;
+        try {
+            thread.setDaemon(true);
+            thread.start();
+            callable.awaitStarted();
+            Throwable throwable = getResult(task, thread);
+            if (throwable != null) {
+                throw throwable;
+            }
+        } finally {
+            try {
+                thread.join(1);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            try {
+                threadGroup.destroy();
+            } catch (IllegalThreadStateException e) {
+                // If a thread from the group is still alive, the ThreadGroup cannot be destroyed.
+                // Swallow the exception to keep the same behavior prior to this change.
+            }
         }
     }
 
@@ -162,7 +177,7 @@ public class FailOnTimeout extends Statement {
         }
         if (stuckThread != null) {
             Exception stuckThreadException = 
-                new Exception ("Appears to be stuck in thread " +
+                new Exception("Appears to be stuck in thread " +
                                stuckThread.getName());
             stuckThreadException.setStackTrace(getStackTrace(stuckThread));
             return new MultipleFailureException(
@@ -197,11 +212,8 @@ public class FailOnTimeout extends Statement {
      * to {@code mainThread}.
      */
     private Thread getStuckThread(Thread mainThread) {
-        if (threadGroup == null) {
-            return null;
-        }
-        Thread[] threadsInGroup = getThreadArray(threadGroup);
-        if (threadsInGroup == null) {
+        List<Thread> threadsInGroup = getThreadsInGroup(mainThread.getThreadGroup());
+        if (threadsInGroup.isEmpty()) {
             return null;
         }
 
@@ -228,49 +240,27 @@ public class FailOnTimeout extends Statement {
      * Returns all active threads belonging to a thread group.  
      * @param group The thread group.
      * @return The active threads in the thread group.  The result should be a
-     * complete list of the active threads at some point in time.  Returns {@code null}
+     * complete list of the active threads at some point in time.  Returns an empty list
      * if this cannot be determined, e.g. because new threads are being created at an
      * extremely fast rate.
      */
-    private Thread[] getThreadArray(ThreadGroup group) {
-        final int count = group.activeCount(); // this is just an estimate
-        int enumSize = Math.max(count * 2, 100);
-        int enumCount;
-        Thread[] threads;
-        int loopCount = 0;
-        while (true) {
-            threads = new Thread[enumSize];
-            enumCount = group.enumerate(threads);
-            if (enumCount < enumSize) {
-                break;
+    private List<Thread> getThreadsInGroup(ThreadGroup group) {
+        final int activeThreadCount = group.activeCount(); // this is just an estimate
+        int threadArraySize = Math.max(activeThreadCount * 2, 100);
+        for (int loopCount = 0; loopCount < 5; loopCount++) {
+            Thread[] threads = new Thread[threadArraySize];
+            int enumCount = group.enumerate(threads);
+            if (enumCount < threadArraySize) {
+                return Arrays.asList(threads).subList(0, enumCount);
             }
             // if there are too many threads to fit into the array, enumerate's result
             // is >= the array's length; therefore we can't trust that it returned all
             // the threads.  Try again.
-            enumSize += 100;
-            if (++loopCount >= 5) {
-                return null;
-            }
-            // threads are proliferating too fast for us.  Bail before we get into 
-            // trouble.
+            threadArraySize += 100;
         }
-        return copyThreads(threads, enumCount);
-    }
-
-    /**
-     * Returns an array of the first {@code count} Threads in {@code threads}. 
-     * (Use instead of Arrays.copyOf to maintain compatibility with Java 1.5.)
-     * @param threads The source array.
-     * @param count The maximum length of the result array.
-     * @return The first {@count} (at most) elements of {@code threads}.
-     */
-    private Thread[] copyThreads(Thread[] threads, int count) {
-        int length = Math.min(count, threads.length);
-        Thread[] result = new Thread[length];
-        for (int i = 0; i < length; i++) {
-            result[i] = threads[i];
-        }
-        return result;
+        // threads are proliferating too fast for us.  Bail before we get into 
+        // trouble.
+        return Collections.emptyList();
     }
 
     /**
@@ -278,7 +268,7 @@ public class FailOnTimeout extends Statement {
      * @param thr The thread to query.
      * @return The CPU time used by {@code thr}, or 0 if it cannot be determined.
      */
-    private long cpuTime (Thread thr) {
+    private long cpuTime(Thread thr) {
         ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
         if (mxBean.isThreadCpuTimeSupported()) {
             try {

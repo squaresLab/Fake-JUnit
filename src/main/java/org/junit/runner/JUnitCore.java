@@ -34,7 +34,6 @@ public class JUnitCore {
      */
     public static void main(String... args) {
         Result result = new JUnitCore().runMain(new RealSystem(), args);
-        org.junit.Assert.printStats();
         System.exit(result.wasSuccessful() ? 0 : 1);
     }
 
@@ -140,7 +139,6 @@ public class JUnitCore {
         } finally {
             removeListener(listener);
         }
-        org.junit.Assert.printStats();
         return result;
     }
 
