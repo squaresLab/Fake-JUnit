@@ -38,6 +38,32 @@ public class DataPack {
         }
     }
     
+    public static void dataDump2() {
+        double finalscore = 0;
+        if(data.size()>0) {
+            Map<String, Double> scoremap = new TreeMap<String, Double>();
+            for(DataPack dp : data) {
+                String key = dp.ste[dp.depth+2].toString();
+                if(scoremap.containsKey(key)) {
+                    double prev = scoremap.get(key);
+                    if(dp.score<prev)scoremap.put(key, dp.score);
+                }else {
+                    scoremap.put(key, dp.score);
+                }
+            }
+            for(String key : scoremap.keySet()) {
+                finalscore += scoremap.get(key);
+            }
+            finalscore = finalscore /scoremap.size();
+        }
+        try {
+          ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Temp.arr"));
+          oos.writeObject(finalscore);
+          oos.flush();
+          oos.close();
+        }catch(Throwable e) {e.printStackTrace();}
+    }
+    
     
     @Override
     public String toString() {
