@@ -78,7 +78,6 @@ public class Assert {
         System.out.println("AssertArrayEqualsStringCount: "+assertArrayEqualsStringCount);
         System.out.println("AssertArrayEqualsBooleanCount: "+assertArrayEqualsBooleanCount);
         System.out.println("AssertArrayEqualsShortCount: "+assertArrayEqualsShortCount);
-        System.out.println("AssertArrayEqualsByteCount: "+assertArrayEqualsIntCount);
         System.out.println("AssertArrayEqualsNonStringObjectCount: "+assertArrayEqualsNonStringObjectCount);
         System.out.println("AssertArrayEqualsIntCount: "+assertArrayEqualsIntCount);
         System.out.println("AssertSameCount: "+assertSameCount);
