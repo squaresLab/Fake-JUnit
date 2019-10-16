@@ -18,9 +18,9 @@ public class Assert {
      * an AssertionFailedError with the given message.
      */
     static public void assertTrue(String message, boolean condition) {
-        if (!condition) {
-            fail(message);
-        }
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertTrue(condition);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -28,7 +28,9 @@ public class Assert {
      * an AssertionFailedError.
      */
     static public void assertTrue(boolean condition) {
-        assertTrue(null, condition);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertTrue(condition);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -36,7 +38,9 @@ public class Assert {
      * an AssertionFailedError with the given message.
      */
     static public void assertFalse(String message, boolean condition) {
-        assertTrue(message, !condition);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertFalse(condition);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -44,7 +48,9 @@ public class Assert {
      * an AssertionFailedError.
      */
     static public void assertFalse(boolean condition) {
-        assertFalse(null, condition);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertFalse(condition);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -69,13 +75,9 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.
      */
     static public void assertEquals(String message, Object expected, Object actual) {
-        if (expected == null && actual == null) {
-            return;
-        }
-        if (expected != null && expected.equals(actual)) {
-            return;
-        }
-        failNotEquals(message, expected, actual);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -83,28 +85,27 @@ public class Assert {
      * an AssertionFailedError is thrown.
      */
     static public void assertEquals(Object expected, Object actual) {
-        assertEquals(null, expected, actual);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
      * Asserts that two Strings are equal.
      */
     static public void assertEquals(String message, String expected, String actual) {
-        if (expected == null && actual == null) {
-            return;
-        }
-        if (expected != null && expected.equals(actual)) {
-            return;
-        }
-        String cleanMessage = message == null ? "" : message;
-        throw new ComparisonFailure(cleanMessage, expected, actual);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
      * Asserts that two Strings are equal.
      */
     static public void assertEquals(String expected, String actual) {
-        assertEquals(null, expected, actual);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -113,12 +114,9 @@ public class Assert {
      * value is infinity then the delta value is ignored.
      */
     static public void assertEquals(String message, double expected, double actual, double delta) {
-        if (Double.compare(expected, actual) == 0) {
-            return;
-        }
-        if (!(Math.abs(expected - actual) <= delta)) {
-            failNotEquals(message, new Double(expected), new Double(actual));
-        }
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual,delta);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -126,7 +124,9 @@ public class Assert {
      * value is infinity then the delta value is ignored.
      */
     static public void assertEquals(double expected, double actual, double delta) {
-        assertEquals(null, expected, actual, delta);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual,delta);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -135,12 +135,9 @@ public class Assert {
      * expected value is infinity then the delta value is ignored.
      */
     static public void assertEquals(String message, float expected, float actual, float delta) {
-        if (Float.compare(expected, actual) == 0) {
-            return;
-        }
-        if (!(Math.abs(expected - actual) <= delta)) {
-            failNotEquals(message, new Float(expected), new Float(actual));
-        }
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual,delta);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -148,7 +145,9 @@ public class Assert {
      * value is infinity then the delta value is ignored.
      */
     static public void assertEquals(float expected, float actual, float delta) {
-        assertEquals(null, expected, actual, delta);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual,delta);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -156,14 +155,18 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.
      */
     static public void assertEquals(String message, long expected, long actual) {
-        assertEquals(message, Long.valueOf(expected), Long.valueOf(actual));
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
      * Asserts that two longs are equal.
      */
     static public void assertEquals(long expected, long actual) {
-        assertEquals(null, expected, actual);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -171,14 +174,18 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.
      */
     static public void assertEquals(String message, boolean expected, boolean actual) {
-        assertEquals(message, Boolean.valueOf(expected), Boolean.valueOf(actual));
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
      * Asserts that two booleans are equal.
      */
     static public void assertEquals(boolean expected, boolean actual) {
-        assertEquals(null, expected, actual);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -186,14 +193,18 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.
      */
     static public void assertEquals(String message, byte expected, byte actual) {
-        assertEquals(message, Byte.valueOf(expected), Byte.valueOf(actual));
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
      * Asserts that two bytes are equal.
      */
     static public void assertEquals(byte expected, byte actual) {
-        assertEquals(null, expected, actual);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -201,14 +212,18 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.
      */
     static public void assertEquals(String message, char expected, char actual) {
-        assertEquals(message, Character.valueOf(expected), Character.valueOf(actual));
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
      * Asserts that two chars are equal.
      */
     static public void assertEquals(char expected, char actual) {
-        assertEquals(null, expected, actual);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -216,14 +231,18 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.
      */
     static public void assertEquals(String message, short expected, short actual) {
-        assertEquals(message, Short.valueOf(expected), Short.valueOf(actual));
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
      * Asserts that two shorts are equal.
      */
     static public void assertEquals(short expected, short actual) {
-        assertEquals(null, expected, actual);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -231,21 +250,27 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.
      */
     static public void assertEquals(String message, int expected, int actual) {
-        assertEquals(message, Integer.valueOf(expected), Integer.valueOf(actual));
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
      * Asserts that two ints are equal.
      */
     static public void assertEquals(int expected, int actual) {
-        assertEquals(null, expected, actual);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertEquals(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
      * Asserts that an object isn't null.
      */
     static public void assertNotNull(Object object) {
-        assertNotNull(null, object);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertNotNull(object);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -253,7 +278,9 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.
      */
     static public void assertNotNull(String message, Object object) {
-        assertTrue(message, object != null);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertNotNull(object);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -264,9 +291,9 @@ public class Assert {
      * @param object Object to check or <code>null</code>
      */
     static public void assertNull(Object object) {
-        if (object != null) {
-            assertNull("Expected: <null> but was: " + object.toString(), object);
-        }
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertNull(object);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -274,7 +301,9 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.
      */
     static public void assertNull(String message, Object object) {
-        assertTrue(message, object == null);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertNull(object);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -282,10 +311,9 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.
      */
     static public void assertSame(String message, Object expected, Object actual) {
-        if (expected == actual) {
-            return;
-        }
-        failNotSame(message, expected, actual);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertSame(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -293,7 +321,9 @@ public class Assert {
      * the same an AssertionFailedError is thrown.
      */
     static public void assertSame(Object expected, Object actual) {
-        assertSame(null, expected, actual);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertSame(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -302,9 +332,9 @@ public class Assert {
      * given message.
      */
     static public void assertNotSame(String message, Object expected, Object actual) {
-        if (expected == actual) {
-            failSame(message);
-        }
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertNotSame(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     /**
@@ -312,7 +342,9 @@ public class Assert {
      * refer to the same object an AssertionFailedError is thrown.
      */
     static public void assertNotSame(Object expected, Object actual) {
-        assertNotSame(null, expected, actual);
+        org.junit.Assert.depth++;
+        org.junit.Assert.assertNotSame(expected,actual);
+        org.junit.Assert.depth--;
     }
 
     static public void failSame(String message) {
