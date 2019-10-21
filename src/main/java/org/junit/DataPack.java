@@ -1,6 +1,9 @@
 package org.junit;
 
 import java.util.*;
+
+import org.junit.runner.notification.Failure;
+
 import java.io.*;
 
 public class DataPack {
@@ -38,12 +41,21 @@ public class DataPack {
         }
     }
     
-    public static void dataDump2() {
+    public static void dataDump2(List<Failure> list) {
         double finalscore = 0;
         if(data.size()>0) {
             Map<String, Double> scoremap = new TreeMap<String, Double>();
             for(DataPack dp : data) {
                 String key = dp.ste[dp.depth+2].toString();
+                for(Failure f : list) {
+                    String s = f.getTestHeader();
+                    for(StackTraceElement stee : dp.ste) {
+                        if(stee.toString().indexOf(s) >= 0) {
+                            dp.score = 0;
+                            break;
+                        }
+                    }
+                }
                 if(scoremap.containsKey(key)) {
                     double prev = scoremap.get(key);
                     if(dp.score<prev)scoremap.put(key, dp.score);
