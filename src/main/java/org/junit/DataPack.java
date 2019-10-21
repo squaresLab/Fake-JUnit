@@ -49,6 +49,7 @@ public class DataPack {
                 String key = dp.ste[dp.depth+2].toString();
                 for(Failure f : list) {
                     String s = f.getTestHeader();
+                    System.out.println("woawoawoa "+s);
                     for(StackTraceElement stee : dp.ste) {
                         if(stee.toString().indexOf(s) >= 0) {
                             dp.score = 0;
