@@ -48,7 +48,7 @@ public class DataPack {
             for(DataPack dp : data) {
                 String key = dp.ste[dp.depth+2].toString();
                 for(Failure f : list) {
-                    String s = f.getTestHeader();
+                    String s = testparser(f.getTestHeader());
                     for(StackTraceElement stee : dp.ste) {
                         if(stee.toString().indexOf(s) >= 0) {
                             dp.score = 0;
@@ -76,6 +76,11 @@ public class DataPack {
         }catch(Throwable e) {e.printStackTrace();}
     }
     
+    public static String testparser(String testa) {
+        int start = testa.indexOf("(");
+        int end = testa.lastIndexOf(")");
+        return testa.substring(start+1,end);
+    }
     
     @Override
     public String toString() {
