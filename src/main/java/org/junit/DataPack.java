@@ -45,22 +45,11 @@ public class DataPack {
     
     public static void dataDump2(List<Failure> list) {
         double finalscore = 0;
-        if(data.size()>0) {
+        if(data.size()>0 && list.size() == 0 ) {
             Map<String, Double> scoremap = new TreeMap<String, Double>();
             for(DataPack dp : data) {
-		if(dp.ste[dp.depth+2].toString().equals("org.junit.runners.model.TestClass.getOnlyConstructor(TestClass.java:205)"))continue;
-                String key = (dp.ste[dp.depth+2].toString())+(dp.ste[dp.depth+1].toString());
-                for(Failure f : list) {
-                    String s = testparser(f.getTestHeader());
-                    //System.out.println("woawoawoa "+s);
-                    for(StackTraceElement stee : dp.ste) {
-			//System.out.println("woowoowoo "+stee.toString());
-                        if(stee.toString().indexOf(s) >= 0) {
-                            dp.score = 0;
-                            break;
-                        }
-                    }
-                }
+		        if(dp.ste[dp.depth+2].toString().equals("org.junit.runners.model.TestClass.getOnlyConstructor(TestClass.java:205)"))continue;
+                String key = (dp.ste[dp.depth+3].toString()+dp.ste[dp.depth+2].toString())+(dp.ste[dp.depth+1].toString());
                 if(scoremap.containsKey(key)) {
                     double prev = scoremap.get(key);
                     if(dp.score<prev)scoremap.put(key, dp.score);
@@ -69,7 +58,7 @@ public class DataPack {
                 }
             }
             for(String key : scoremap.keySet()) {
-		if(!Double.isNaN(scoremap.get(key)))
+		    if(!Double.isNaN(scoremap.get(key)))
                 finalscore += scoremap.get(key);
             }
             finalscore = finalscore /scoremap.size();
