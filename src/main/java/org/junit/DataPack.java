@@ -27,7 +27,8 @@ public class DataPack {
     }
     
     public static void checkdouble(double a, double b,int d) {
-        data.add(new DataPack(getStackTrace(),Math.exp(0-Math.abs(a-b)),d));
+	if(Double.isNaN(a) || Double.isNaN(b))data.add(new DataPack(getStackTrace(),0,d));
+        else data.add(new DataPack(getStackTrace(),Math.exp(0-Math.abs(a-b)),d));
     }
     
     public static void checkString(String a, String b, int d){
@@ -36,6 +37,7 @@ public class DataPack {
     
     public static void dataDump() {
         for(DataPack dp : data) {
+	    System.out.println("Key: "+dp.ste[dp.depth+2]);
             if(dp.ste[dp.depth+2].toString().equals("org.junit.runners.model.TestClass.getOnlyConstructor(TestClass.java:205)"))continue;
             System.out.println(dp.toString());
         }
@@ -46,11 +48,13 @@ public class DataPack {
         if(data.size()>0) {
             Map<String, Double> scoremap = new TreeMap<String, Double>();
             for(DataPack dp : data) {
-                String key = dp.ste[dp.depth+2].toString();
+		if(dp.ste[dp.depth+2].toString().equals("org.junit.runners.model.TestClass.getOnlyConstructor(TestClass.java:205)"))continue;
+                String key = (dp.ste[dp.depth+2].toString())+(dp.ste[dp.depth+1].toString());
                 for(Failure f : list) {
                     String s = testparser(f.getTestHeader());
-                    System.out.println("woawoawoa "+s);
+                    //System.out.println("woawoawoa "+s);
                     for(StackTraceElement stee : dp.ste) {
+			//System.out.println("woowoowoo "+stee.toString());
                         if(stee.toString().indexOf(s) >= 0) {
                             dp.score = 0;
                             break;
@@ -65,6 +69,7 @@ public class DataPack {
                 }
             }
             for(String key : scoremap.keySet()) {
+		if(!Double.isNaN(scoremap.get(key)))
                 finalscore += scoremap.get(key);
             }
             finalscore = finalscore /scoremap.size();
@@ -133,5 +138,4 @@ public class DataPack {
         return mem[a][b];
         
     }
-
 }
