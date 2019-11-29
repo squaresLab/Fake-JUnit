@@ -45,6 +45,7 @@ public class DataPack {
     
     public static void dataDump2(List<Failure> list) {
         double finalscore = 0;
+        double finalscore2 = 0;
         if(data.size()>0 && list.size() == 0 ) {
             Map<String, Double> scoremap = new TreeMap<String, Double>();
             for(DataPack dp : data) {
@@ -60,16 +61,22 @@ public class DataPack {
             for(String key : scoremap.keySet()) {
 		    if(!Double.isNaN(scoremap.get(key)))
                 finalscore += scoremap.get(key);
+		        if(scoremap.get(key) == 1.0) finalscore2 += 1.0;
             }
             finalscore = finalscore /scoremap.size();
         }
+        ArrayList<Double> finalscores = new ArrayList<Double>();
+        finalscores.add(finalscore);
+        finalscores.add(finalscore2);
         try {
           ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Temp.arr"));
-          oos.writeObject(finalscore);
+          oos.writeObject(finalscores);
           oos.flush();
           oos.close();
         }catch(Throwable e) {e.printStackTrace();}
     }
+    
+    
     
     public static String testparser(String testa) {
         int start = testa.indexOf("(");
